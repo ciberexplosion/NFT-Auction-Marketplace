@@ -20,7 +20,7 @@ class App extends Component {
   //Window.ethereum updated
  
   async loadBlockchainData() {
-    const web3 = new Web3(Web3.givenProvider ||"https://localhost:9545"||||"https://localhost:7545"||||"https://localhost:8545") 
+    const web3 = new Web3(Web3.givenProvider ||"https://localhost:9545"||"https://localhost:7545"||"https://localhost:8545") 
     
     const accounts = await web3.eth.getAccounts()
     console.log("account  ",  accounts)
