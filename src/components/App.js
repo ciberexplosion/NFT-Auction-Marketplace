@@ -18,28 +18,15 @@ class App extends Component {
   }
    
   //Window.ethereum updated
-  async loadWeb3() {
-    if (window.ethereum) //Detect metamask
-    {
-      window.web3 = new Web3(window.ethereum) //If ussing window.ethereum
-      await window.ethereum.enable()
-    }
-    else if (window.web3) {   //Else if using older version
-      window.web3 = new Web3(window.web3.currentProvider)
-    }
-    else {  //No Metamask
-      window.alert('No Metamask!')
-    }
-  }
-
+ 
   async loadBlockchainData() {
-    const web3 = window.web3  //To be replaced!
+    const web3 = new Web3(Web3.givenProvider ||"https://localhost:9545") //To be replaced!
     
-    var accounts = await web3.eth.getAccounts()
+    const accounts = await web3.eth.getAccounts()
     console.log("account  ",  accounts)
     this.setState({  account: accounts[0] })
     console.log("Account set", this.state.account)
-    var networkId = await web3.eth.net.getId()
+    const networkId = await web3.eth.net.getId()
     var networkData = ArtAuction.networks[networkId]
     if(networkData) {
       var contract = new web3.eth.Contract(ArtAuction.abi, networkData.address)
