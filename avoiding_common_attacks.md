@@ -1,4 +1,3 @@
-
 Attacks avoided:
 
 1.Reentrancy Attack Users fund are added to a mapping of their deposits and address. The widhrawl function can only be called when the auction is cancelled. Each user calls widhrawl function to widhraw their own funds. send() call is the last step taken after all the internal processing and subtraction of balances has been done.
