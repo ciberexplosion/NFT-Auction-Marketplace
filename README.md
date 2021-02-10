@@ -59,6 +59,7 @@ There is a seperate widhraw function that follows widhrawl design pattern to pre
 There is no owner of the contract and anyone can his/her art for sale and tokenize it or buy it. If ever frontend application is censored down, the contract is untouched as it is stored on-chain along with IPFS hash.
 
 **TESTS**
+
 Run a local enviornment, preferrably on Ganache.
 >truffle migrate
 
