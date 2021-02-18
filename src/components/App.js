@@ -13,27 +13,15 @@ class App extends Component {
 
   //Metamask componenet appears on screen
   async componentWillMount() {
-    await this.loadWeb3()
+    
     await this.loadBlockchainData()
   }
    
   //Window.ethereum updated
-  async loadWeb3() {
-    if (window.ethereum) //Detect metamask
-    {
-      window.web3 = new Web3(window.ethereum) //If ussing window.ethereum
-      await window.ethereum.enable()
-    }
-    else if (window.web3) {   //Else if using older version
-      window.web3 = new Web3(window.web3.currentProvider)
-    }
-    else {  //No Metamask
-      window.alert('No Metamask!')
-    }
-  }
+  
 
   async loadBlockchainData() {
-    const web3 = window.web3  //To be replaced!
+    const web3= new Web3(Web3.givenProvider ||"http://localhost:9545") //To be replaced!
     
     var accounts = await web3.eth.getAccounts()
     console.log("account  ",  accounts)

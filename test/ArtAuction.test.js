@@ -1,5 +1,5 @@
 const { assert } = require("chai");
-const { createChainedFunction } = require("react-bootstrap/lib/utils");
+
 
 const ArtAuction = artifacts.require("ArtAuction");
 
@@ -8,16 +8,32 @@ contract("ArtAuction", function(accounts) {
 	const AccountTwo = accounts[1];
   
   before(async () => {
-		contract = await DigitalArt.deployed();
-  });
-  
-  it('should deploy smart contract properly', async()=>{
-    const ArtAuction = await ArtAuction.deployed();
-    console.log(ArtAuction.address);
-    assert(ArtAuction.address!='');
+		contract = await ArtAuction.deployed();
   });
 
-	it('It shoudl set an art item', async()=>{
+  describe('deployment', async () => {
+    it('deploys successfully', async () => {
+      const address = contract.address
+      assert.notEqual(address, 0x0)
+      assert.notEqual(address, '')
+      assert.notEqual(address, null)
+      assert.notEqual(address, undefined)
+    })
+
+    it('has a name', async () => {
+      const name = await contract.name()
+      assert.equal(name, 'DART')
+    })
+
+    it('has a symbol', async () => {
+      const symbol = await contract.symbol()
+      assert.equal(symbol, 'ART')
+    })
+
+  })
+  
+
+	it('It should set an art item', async()=>{
     let error = null;
     try{
     const ArtAuction = await ArtAuction.deployed();
@@ -28,21 +44,6 @@ contract("ArtAuction", function(accounts) {
     assert.isNull(error);
   });
 
-  it('It shoudl get art item', async()=>{
-  // Arrange
-  let err = null;
-  let response = null;
-
-  // Act
-  try {
-    response = await contract.getArtItem(tArtItemIdOne);
-  } catch (error) {
-    err = error;
-  }
-
-  // Assert
-  assert.isNull(err);
-});
 
 it("should not add art item with price of zero", async () => {
   // Arrange
@@ -59,7 +60,7 @@ it("should not add art item with price of zero", async () => {
   assert.isNotNull(err);
 });
 
-it("shoudl not cancel an auction that does not exists",async() =>{
+it("should not cancel an auction that does not exists",async() =>{
   let err=null;
 
   try{
