@@ -1,8 +1,7 @@
-ragma solidity ^0.6.3;
+pragma solidity ^0.6.3;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/8108f2f9b917616a8cd0661c31a211ad9f988110/contracts/token/ERC721/ERC721.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/8108f2f9b917616a8cd0661c31a211ad9f988110/contracts/math/SafeMath.sol";
-
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 contract ArtAuction is ERC721 {
    
   using SafeMath for uint256;  //For Future use
@@ -12,7 +11,6 @@ contract ArtAuction is ERC721 {
   //variables that remain static or connstant
    mapping(uint256 => ArtItem) private _artItems;  //Map id to ArtItem
   address public owner;   //owner
-  bool public canceled=false;
   //variables that are dynamic or change
   uint256 public _tokenIds;  
   //Unique Image ID that are tokenized
@@ -23,14 +21,13 @@ contract ArtAuction is ERC721 {
   //map _artItemIds to fundsByBidder
   mapping(int256=>uint256) token; //Map tokenIds to _artItemIds so as to connect to struct.
   mapping(uint256=>bidding) public bid;  //mapping tokenid to bidding
-  bool auctionstarted = false;  //to check if auction started
   bool firsttime = false;  //to mart first successfull bid
-  
+
    //Events
     event LogBid(address bidder, uint bid, address highestBidder, uint highestBid, uint highestBindingBid);  
     event LogWithdrawal(address withdrawer, address withdrawalAccount, uint amount);
     event LogCanceled();
-        
+
   //Art Item
   struct ArtItem {
         address payable seller; //address of seller
@@ -38,9 +35,10 @@ contract ArtAuction is ERC721 {
         string tokenURI;  //IPFS URL
         bool exists;    //token by id exists or not
         uint bidIncrement; //incremention of bid
-        uint time;       //time are the time of creation of contract
-        uint timePeriod;  //Time period after which contract expires
-        bool cancelled;   // If the auction is cancelled or not
+        uint time;
+        uint timePeriod;
+        bool cancelled;
+        bool auctionstarted;
     }
    
     struct bidding{
@@ -67,10 +65,6 @@ contract ArtAuction is ERC721 {
     _;
      }
 
-    modifier onlyNotCanceled{        //Auction only if is not cancelled
-    if (canceled) revert();
-    _;
-     }
     modifier onlyOwner(uint256 id)
      {
         ArtItem memory artItem = _artItems[id];  
@@ -90,7 +84,7 @@ contract ArtAuction is ERC721 {
 
         _artItemIds++;
    
-        _artItems[_artItemIds] = ArtItem(msg.sender, price, tokenURI, true, _bidincrement, now, timePeriod,false);
+        _artItems[_artItemIds] = ArtItem(msg.sender, price, tokenURI, true, _bidincrement, now, timePeriod,false,false);
     }
 
        
@@ -118,13 +112,12 @@ contract ArtAuction is ERC721 {
    
     //Cancel auction
     function cancelAuction(uint256 id) public payable
-    onlyNotCanceled()
     returns (bool success)
    {
    
     ArtItem storage artItem = _artItems[id];  
-   
-    if((artItem.time + artItem.timePeriod < now))  //mint token if auctionstarted
+    require(artItem.cancelled==false);
+    if((artItem.time + (artItem.timePeriod * 1 seconds) < now))  //mint token if auctionstarted
     {
     bidding storage bid = bid[id];
     _tokenIds++;
@@ -142,28 +135,28 @@ contract ArtAuction is ERC721 {
        
    
     LogCanceled();
-   
+    return artItem.cancelled;    
    }
    
    function placeBid(uint256 id) public
     payable
-    onlyNotCanceled
     onlyNotOwner(id)
     minbid(id)
    
     returns (bool success)
-{
+{  
+
     // reject payments of 0 ETH
     if (msg.value == 0) revert();
    
     // calculate the user's total bid based on the current amount they've sent to the contract
     // plus whatever has been sent with this transaction
     bidding storage bid = bid[id];
-    auctionstarted = true;
-    ArtItem memory artItem = _artItems[id];  
-
-    uint newBid = fundsByBidder[id][msg.sender] + msg.value;
+    ArtItem storage artItem = _artItems[id];  
    
+    require(artItem.cancelled==false);
+ 
+    uint newBid = fundsByBidder[id][msg.sender] + msg.value;
 
     // if the user isn't even willing to overbid the highest binding bid, there's nothing for us
     // to do except revert the transaction.
@@ -213,8 +206,12 @@ contract ArtAuction is ERC721 {
         }
         highestBid = newBid;
     }
-
+    if(artItem.auctionstarted==false)
+    {
+        bid.highestBindingBid = msg.value;
+    }
     LogBid(msg.sender, newBid, bid.highestBidder, highestBid, bid.highestBindingBid);
+    artItem.auctionstarted = true;
     return true;
     }
    
@@ -222,7 +219,7 @@ contract ArtAuction is ERC721 {
     returns (bool success)
 {  
     require(_artItems[id].cancelled==true);
-    require(auctionstarted==true);
+    require(_artItems[id].auctionstarted==true);
     address payable withdrawalAccount;
     uint withdrawalAmount;
     bidding storage bid = bid[id];
@@ -251,4 +248,6 @@ contract ArtAuction is ERC721 {
 
     return true;
 }
+       
 }
+
