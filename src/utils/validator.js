@@ -9,21 +9,24 @@ export default class Validator {
         return true;
     }
 
-    isValidCommission(commission){
-        if(isNaN(commission)){
+    isValidIncrement(increment){
+        if(isNaN(increment)){
             return false;
         }
-        if(commission < 0 || commission > 100){
+        if(increment < 0 || increment > 100){
             return false;
         }
         return true;
     }
 
-    isValidTitle(){
+    isValidDuration(increment){
+        if(isNaN(increment)){
+            return false;
+        }
+        if(increment < 0 || increment > 168){
+            return false;
+        }
         return true;
     }
 
-    isValidAuthor(){
-        return true;
-    }
 }

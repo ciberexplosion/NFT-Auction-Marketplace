@@ -1,8 +1,6 @@
 'use strict';
 
-const defaultBase = self.location ?
-    self.location.protocol + '//' + self.location.host :
-    '';
+const defaultBase = self.location && self.location.protocol + '//' + self.location.host;
 const URL = self.URL;
 
 class URLWithLegacySupport {
