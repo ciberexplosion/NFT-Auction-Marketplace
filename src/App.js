@@ -38,7 +38,7 @@ class App extends Component {
 
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
-      const myContractAddress = '0x2B011F5535f51036668dE59244C96916A366cd6A';
+      const myContractAddress = '0x2446CA20c8887cD37Ae2dA2B1F540b1d6e25B2cd';
 
       // Get the contract instance.
       const instance = new web3.eth.Contract(ArtAuction.abi,
