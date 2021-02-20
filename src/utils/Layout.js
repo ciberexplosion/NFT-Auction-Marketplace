@@ -12,7 +12,7 @@ class Layout extends Component {
     render() {
         return (
             <div>
-                <NavigationBar/>
+                <NavigationBar baseAppState={this.props.baseAppState}/>
                 {this.props.children}
             </div>
         );

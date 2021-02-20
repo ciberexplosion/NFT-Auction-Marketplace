@@ -2,12 +2,12 @@
  * @fileoverview Utility functions for React pragma configuration
  * @author Yannick Croissant
  */
+
 'use strict';
 
-const JSX_ANNOTATION_REGEX = /^\*\s*@jsx\s+([^\s]+)/;
+const JSX_ANNOTATION_REGEX = /@jsx\s+([^\s]+)/;
 // Does not check for reserved keywords or unicode characters
 const JS_IDENTIFIER_REGEX = /^[_$a-zA-Z][_$a-zA-Z0-9]*$/;
-
 
 function getCreateClassFromContext(context) {
   let pragma = 'createReactClass';
@@ -21,16 +21,28 @@ function getCreateClassFromContext(context) {
   return pragma;
 }
 
+function getFragmentFromContext(context) {
+  let pragma = 'Fragment';
+  // .eslintrc shared settings (http://eslint.org/docs/user-guide/configuring#adding-shared-settings)
+  if (context.settings.react && context.settings.react.fragment) {
+    pragma = context.settings.react.fragment;
+  }
+  if (!JS_IDENTIFIER_REGEX.test(pragma)) {
+    throw new Error(`Fragment pragma ${pragma} is not a valid identifier`);
+  }
+  return pragma;
+}
+
 function getFromContext(context) {
   let pragma = 'React';
 
   const sourceCode = context.getSourceCode();
-  const pragmaNode = sourceCode.getAllComments().find(node => JSX_ANNOTATION_REGEX.test(node.value));
+  const pragmaNode = sourceCode.getAllComments().find((node) => JSX_ANNOTATION_REGEX.test(node.value));
 
   if (pragmaNode) {
     const matches = JSX_ANNOTATION_REGEX.exec(pragmaNode.value);
     pragma = matches[1].split('.')[0];
-  // .eslintrc shared settings (http://eslint.org/docs/user-guide/configuring#adding-shared-settings)
+    // .eslintrc shared settings (http://eslint.org/docs/user-guide/configuring#adding-shared-settings)
   } else if (context.settings.react && context.settings.react.pragma) {
     pragma = context.settings.react.pragma;
   }
@@ -42,6 +54,7 @@ function getFromContext(context) {
 }
 
 module.exports = {
-  getCreateClassFromContext: getCreateClassFromContext,
-  getFromContext: getFromContext
+  getCreateClassFromContext,
+  getFragmentFromContext,
+  getFromContext
 };
