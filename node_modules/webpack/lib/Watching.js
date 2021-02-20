@@ -13,6 +13,7 @@ class Watching {
 		this.handler = handler;
 		this.callbacks = [];
 		this.closed = false;
+		this.suspended = false;
 		if (typeof watchOptions === "number") {
 			this.watchOptions = {
 				aggregateTimeout: watchOptions
@@ -50,7 +51,6 @@ class Watching {
 				this.compiler.emitAssets(compilation, err => {
 					if (err) return this._done(err);
 					if (this.invalid) return this._done();
-
 					this.compiler.emitRecords(err => {
 						if (err) return this._done(err);
 
@@ -95,7 +95,6 @@ class Watching {
 			this.handler(err, stats);
 			return;
 		}
-
 		this.compiler.hooks.done.callAsync(stats, () => {
 			this.handler(null, stats);
 			if (!this.closed) {
@@ -124,7 +123,8 @@ class Watching {
 				contextModified,
 				missingModified,
 				fileTimestamps,
-				contextTimestamps
+				contextTimestamps,
+				removedFiles
 			) => {
 				this.pausedWatcher = this.watcher;
 				this.watcher = null;
@@ -133,7 +133,10 @@ class Watching {
 				}
 				this.compiler.fileTimestamps = fileTimestamps;
 				this.compiler.contextTimestamps = contextTimestamps;
-				this._invalidate();
+				this.compiler.removedFiles = removedFiles;
+				if (!this.suspended) {
+					this._invalidate();
+				}
 			},
 			(fileName, changeTime) => {
 				this.compiler.hooks.invalid.call(fileName, changeTime);
@@ -158,6 +161,7 @@ class Watching {
 			this.watcher.pause();
 			this.watcher = null;
 		}
+
 		if (this.running) {
 			this.invalid = true;
 			return false;
@@ -166,10 +170,23 @@ class Watching {
 		}
 	}
 
+	suspend() {
+		this.suspended = true;
+		this.invalid = false;
+	}
+
+	resume() {
+		if (this.suspended) {
+			this.suspended = false;
+			this._invalidate();
+		}
+	}
+
 	close(callback) {
 		const finalCallback = () => {
 			this.compiler.hooks.watchClose.call();
 			this.compiler.running = false;
+			this.compiler.watchMode = false;
 			if (callback !== undefined) callback();
 		};
 

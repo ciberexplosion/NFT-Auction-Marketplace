@@ -1,0 +1,13 @@
+.art-side-bar-wrapper{
+    height: 400px !important;
+    overflow-y: auto !important;
+}
+
+.art-side-bar-wrapper::-webkit-scrollbar-thumb {
+    background: #33b5e5 !important;    
+}    
+
+.art-side-bar-wrapper::-webkit-scrollbar {
+    width: 10px;
+    background: rgba(0,0,0,.1) !important;
+}

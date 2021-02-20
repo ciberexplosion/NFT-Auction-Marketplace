@@ -8,12 +8,20 @@ const DependencyReference = require("./DependencyReference");
 const ModuleDependency = require("./ModuleDependency");
 const UnsupportedWebAssemblyFeatureError = require("../wasm/UnsupportedWebAssemblyFeatureError");
 
+/** @typedef {import("@webassemblyjs/ast").ModuleImportDescription} ModuleImportDescription */
+
 class WebAssemblyImportDependency extends ModuleDependency {
+	/**
+	 * @param {string} request the request
+	 * @param {string} name the imported name
+	 * @param {ModuleImportDescription} description the WASM ast node
+	 * @param {false | string} onlyDirectImport if only direct imports are allowed
+	 */
 	constructor(request, name, description, onlyDirectImport) {
 		super(request);
 		/** @type {string} */
 		this.name = name;
-		/** @type {TODO} */
+		/** @type {ModuleImportDescription} */
 		this.description = description;
 		/** @type {false | string} */
 		this.onlyDirectImport = onlyDirectImport;
@@ -32,9 +40,7 @@ class WebAssemblyImportDependency extends ModuleDependency {
 		) {
 			return [
 				new UnsupportedWebAssemblyFeatureError(
-					`Import "${this.name}" from "${this.request}" with ${
-						this.onlyDirectImport
-					} can only be used for direct wasm to wasm dependencies`
+					`Import "${this.name}" from "${this.request}" with ${this.onlyDirectImport} can only be used for direct wasm to wasm dependencies`
 				)
 			];
 		}
