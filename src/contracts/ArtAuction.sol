@@ -39,6 +39,7 @@ contract ArtAuction is ERC721 {
         uint timePeriod;
         bool cancelled;
         bool auctionstarted;
+        string name;
     }
    
     struct bidding{
@@ -79,12 +80,12 @@ contract ArtAuction is ERC721 {
         _;
     }
 
-  function addArtItem(uint256 price, string memory tokenURI, uint _bidincrement, uint timePeriod) public {
+  function addArtItem(uint256 price, string memory tokenURI, uint _bidincrement, uint timePeriod, string memory name) public {
         require(price >= 0, "Price cannot be lesss than 0");
 
         _artItemIds++;
    
-        _artItems[_artItemIds] = ArtItem(msg.sender, price, tokenURI, true, _bidincrement, now, timePeriod,false,false);
+        _artItems[_artItemIds] = ArtItem(msg.sender, price, tokenURI, true, _bidincrement, now, timePeriod,false,false,name);
     }
 
        
@@ -100,12 +101,14 @@ contract ArtAuction is ERC721 {
             uint,
             uint,
             uint,
-            bool
+            bool,
+            string memory,
+            address payable
         )
     {
         ArtItem memory artItem = _artItems[id];
         bidding memory bid = bid[id];
-        return (id, artItem.minbid, artItem.tokenURI, bid.highestBindingBid,artItem.time,artItem.timePeriod,artItem.cancelled);
+        return (id, artItem.minbid, artItem.tokenURI, bid.highestBindingBid,artItem.time,artItem.timePeriod,artItem.cancelled,artItem.name,artItem.seller);
     }
    
     //auction functions :
