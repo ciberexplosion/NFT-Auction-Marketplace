@@ -14,8 +14,8 @@ class MarketPlaceSell extends Component {
     constructor(props){
         super(props);
         this.state = {
-            accounts: [],
-            contract: null,
+            accounts: this.props.baseAppState.accounts,
+            contract: this.props.baseAppState.contract,
             file: null,
             buffer: null,
             price: 0,
@@ -78,7 +78,7 @@ class MarketPlaceSell extends Component {
         console.log("fetch my art items method");
     }
 
-    addArtItem(bookProps){
+    addArtItem(){
         const contract = this.state.contract;
         const account = this.state.accounts[0];
         let hashHelper = new HashHelper();
@@ -231,13 +231,13 @@ class MarketPlaceSell extends Component {
                 }}), this.resetDocumentSelection());
 
                 //TODO: send to blockchain
-                // this.addArtItem();
+                this.addArtItem();
 
-                this.setState(prevState => ({
-                    success: {
-                        ...prevState.success,
-                        uploadFile: 'Your Art has been successfully added!'
-                }})); 
+                // this.setState(prevState => ({
+                //     success: {
+                //         ...prevState.success,
+                //         uploadFile: 'Your Art has been successfully added!'
+                // }})); 
                 this.resetInputs();
                 console.log('complete ipfs upload');                
             })
@@ -270,7 +270,7 @@ class MarketPlaceSell extends Component {
 
     render() {
         return (
-            <MDBContainer className="pt-5">
+            <MDBContainer className="page-container">
                 <MDBRow>
                     <MDBCol md={3}>
                         <div className={`drop-file ${this.state.file ? "file-loaded" : ""}`}>

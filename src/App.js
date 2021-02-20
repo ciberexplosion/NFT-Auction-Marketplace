@@ -38,16 +38,18 @@ class App extends Component {
 
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
+      const myContractAddress = '0x2B011F5535f51036668dE59244C96916A366cd6A';
 
       // Get the contract instance.
-      //const instance = new this.web3.eth.Contract(ArtAuction.abi, myContractAddress)//TODO: get contract address
+      const instance = new web3.eth.Contract(ArtAuction.abi,
+        myContractAddress);
 
-      const networkId = await web3.eth.net.getId();
-      const deployedNetwork = ArtAuction.networks[networkId];
-      const instance = new web3.eth.Contract(
-        ArtAuction.abi,
-        deployedNetwork && deployedNetwork.address,
-      );
+      // const networkId = await web3.eth.net.getId();
+      // const deployedNetwork = ArtAuction.networks[networkId];
+      // const instance = new web3.eth.Contract(
+      //   ArtAuction.abi,
+      //   deployedNetwork && deployedNetwork.address,
+      // );
 
       // const Contract = truffleContract(CentralBBookshop);
       // Contract.setProvider(web3.currentProvider);
@@ -55,8 +57,7 @@ class App extends Component {
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance },
-        () => this.userSignin());
+      this.setState({ web3, accounts, contract: instance });//() => this.userSignin()
 
     } catch (error) {
       // Catch any errors for any of the above operations.

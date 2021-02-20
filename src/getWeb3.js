@@ -8,24 +8,30 @@ const getWeb3 = () =>
 
       // Modern dapp browsers...
       if (window.ethereum) {
-        const web3 = new Web3(window.ethereum);
-        try {
-          // Request account access if needed
-          await window.ethereum.enable();
-          // Acccounts now exposed
-          resolve(web3);
-        } catch (error) {
-          reject(error);
-        }
+         //Use Portis
+        const portis = new Portis('28d6577c-2916-43bc-b4c5-f5dd87b9b62e', 'maticMumbai');
+        const web3 = new Web3(portis.provider);
+        console.log("Injected web3 detected.", web3);
+        resolve(web3);
+
+        // const web3 = new Web3(window.ethereum);
+        // try {
+        //   // Request account access if needed
+        //   await window.ethereum.enable();
+        //   // Acccounts now exposed
+        //   resolve(web3);
+        // } catch (error) {
+        //   reject(error);
+        // }
       }
       // Legacy dapp browsers...
       else if (window.web3) {
         // Use Mist/MetaMask's provider.
-        //const web3 = window.web3;
+        const web3 = window.web3;
         
         //Use Portis
-        const portis = new Portis('YOUR_DAPP_ID', 'maticTestnet');
-        const web3 = new Web3(portis.provider);
+        // const portis = new Portis('28d6577c-2916-43bc-b4c5-f5dd87b9b62e', 'maticMumbai');
+        // const web3 = new Web3(portis.provider);
         console.log("Injected web3 detected.");
         resolve(web3);
       }

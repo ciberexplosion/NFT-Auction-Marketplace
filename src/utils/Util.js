@@ -9,6 +9,6 @@ export default class HelperFunctions {
 
     GetMaskedAccount(rawAccount){
         if(!rawAccount) return null;
-        return 'xxxxxxxx' + rawAccount.substring(34);
+        return '********' + rawAccount.substring(35);
     }
 }

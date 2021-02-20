@@ -1,17 +1,31 @@
 import React, { Component } from "react";
 import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBDropdown,
-MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBContainer, MDBIcon } from "mdbreact";
+MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBContainer, MDBIcon, MDBTypography } from "mdbreact";
 import '../styles/navbar.scss';
 import { NavLink } from "react-bootstrap";
 import Util from '../utils/Util';
+import Spinner from "./Spinner";
 
 class NavbarPage extends Component {
   constructor(props){
+    
     super(props);
     this.state = {
       collapseID: "",
-      accounts: this.props.baseAppState.accounts
-    };
+      accounts: this.props.baseAppState.accounts,
+      maskedAccount: ''
+    };    
+  }
+
+  componentDidUpdate(){
+    let util = new Util();
+    if(!this.state.accounts){
+      this.setState({accounts: this.props.baseAppState.accounts});      
+    }else{
+      if(!this.state.maskedAccount){
+        this.setState({maskedAccount: util.GetMaskedAccount(this.props.baseAppState.accounts[0])});
+      }
+    }
   }
 
   toggleCollapse = collapseID => () =>
@@ -20,7 +34,7 @@ class NavbarPage extends Component {
   }));
 
   render() {
-    let util = new Util();
+    
     return (
       <MDBNavbar color="info-color" dark expand="md" style={{ marginTop: "20px" }}>
             <MDBNavLink to="/">
@@ -32,7 +46,11 @@ class NavbarPage extends Component {
             <MDBCollapse id="navbarCollapse3" isOpen={this.state.collapseID} navbar>
               <MDBNavbarNav right>
                 <MDBNavItem>
-                  {this.state.accounts ? util.GetMaskedAccount(this.state.accounts[0]) : null}
+                  <span className="text-white" style={{position:'relative', top:'12px', marginRight: '20px'}}>
+                    {this.state.maskedAccount ? 
+                      <strong>Current Account: {this.state.maskedAccount}</strong>
+                    : <Spinner size="small"/>}
+                  </span>
                 </MDBNavItem>
                 <MDBNavItem>
                   <MDBNavLink className="waves-effect waves-light" style={{marginTop: '6px'}} to="#!">

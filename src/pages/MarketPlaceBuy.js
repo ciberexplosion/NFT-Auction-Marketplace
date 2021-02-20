@@ -12,7 +12,7 @@ class MarketPlaceBuy extends Component {
 
     render() {
         return (
-            <MDBContainer className="">
+            <MDBContainer className="page-container">
                 <MDBRow>
                     <MDBCol md="9" lg="9" xl="9">
                         <h1>Buy an Art (NFT)</h1>
