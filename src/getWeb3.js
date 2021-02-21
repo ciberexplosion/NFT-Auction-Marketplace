@@ -9,7 +9,7 @@ const getWeb3 = () =>
       // Modern dapp browsers...
       if (window.ethereum) {
          //Use Portis
-        const portis = new Portis('28d6577c-2916-43bc-b4c5-f5dd87b9b62e', 'maticMumbai');
+        const portis = new Portis('60297f41-80d5-49af-b114-68efa8dedaa1', 'maticMumbai');
         const web3 = new Web3(portis.provider);
         console.log("Injected web3 detected.", web3);
         resolve(web3);
