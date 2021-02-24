@@ -12,15 +12,16 @@ export default class HelperFunctions {
           const myContractAddress = '0x2446CA20c8887cD37Ae2dA2B1F540b1d6e25B2cd';
     
           // Get the contract instance.
-          // const instance = new web3.eth.Contract(ArtAuction.abi,
-          //   myContractAddress);
+          const instance = new web3.eth.Contract(ArtAuction.abi,
+            myContractAddress);
     
-          const networkId = await web3.eth.net.getId();
-          const deployedNetwork = ArtAuction.networks[networkId];
-          const instance = new web3.eth.Contract(
-            ArtAuction.abi,
-            deployedNetwork && deployedNetwork.address,
-          );
+          //for local development
+          // const networkId = await web3.eth.net.getId();
+          // const deployedNetwork = ArtAuction.networks[networkId];
+          // const instance = new web3.eth.Contract(
+          //   ArtAuction.abi,
+          //   deployedNetwork && deployedNetwork.address,
+          // );
     
     
           // Set web3, accounts, and contract to the state, and then proceed with an
