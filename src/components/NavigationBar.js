@@ -16,14 +16,20 @@ class NavbarPage extends Component {
       maskedAccount: ''
     };    
   }
+  
+  componentDidMount(){
+    if(!this.state.accounts){
+        this.setState({accounts: localStorage.getItem('accounts')});
+    }    
+  }
 
   componentDidUpdate(){
     let util = new Util();
-    if(!this.state.accounts){
+    if(!this.state.accounts && this.props.baseAppState){
       this.setState({accounts: this.props.baseAppState.accounts});      
     }else{
-      if(!this.state.maskedAccount){
-        this.setState({maskedAccount: util.GetMaskedAccount(this.props.baseAppState.accounts[0])});
+      if(!this.state.maskedAccount && this.state.accounts){
+        this.setState({maskedAccount: util.GetMaskedAccount(this.state.accounts)});
       }
     }
   }

@@ -7,6 +7,11 @@ import * as serviceWorker from './serviceWorker';
 import reportWebVitals from './reportWebVitals';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'mdbreact/dist/css/mdb.css';
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en';
+import ru from 'javascript-time-ago/locale/ru';
+TimeAgo.addDefaultLocale(en)
+// TimeAgo.addLocale(ru)
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

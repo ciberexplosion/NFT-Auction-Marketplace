@@ -24,9 +24,10 @@ contract ArtAuction is ERC721 {
   bool firsttime = false;  //to mart first successfull bid
 
    //Events
-    event LogBid(address bidder, uint bid, address highestBidder, uint highestBid, uint highestBindingBid);  
-    event LogWithdrawal(address withdrawer, address withdrawalAccount, uint amount);
+    event LogBid(address indexed bidder, uint indexed artItemId, uint bid, address indexed highestBidder, uint highestBid, uint highestBindingBid);  
+    event LogWithdrawal(address indexed withdrawer, address indexed withdrawalAccount, uint amount);
     event LogCanceled();
+    event LogAddItem(uint256 _artItemIds, string name, address payable indexed seller, uint256 price, uint nowTime, uint timePeriod);
 
   //Art Item
   struct ArtItem {
@@ -84,8 +85,9 @@ contract ArtAuction is ERC721 {
         require(price >= 0, "Price cannot be lesss than 0");
 
         _artItemIds++;
-   
-        _artItems[_artItemIds] = ArtItem(msg.sender, price, tokenURI, true, _bidincrement, now, timePeriod,false,false,name);
+        uint nowTime = now;
+        _artItems[_artItemIds] = ArtItem(msg.sender, price, tokenURI, true, _bidincrement, nowTime, timePeriod,false,false,name);
+        emit LogAddItem(_artItemIds, name, msg.sender, price, nowTime, timePeriod);
     }
 
        
@@ -213,7 +215,7 @@ contract ArtAuction is ERC721 {
     {
         bid.highestBindingBid = msg.value;
     }
-    LogBid(msg.sender, newBid, bid.highestBidder, highestBid, bid.highestBindingBid);
+    LogBid(msg.sender, id, newBid, bid.highestBidder, highestBid, bid.highestBindingBid);
     artItem.auctionstarted = true;
     return true;
     }

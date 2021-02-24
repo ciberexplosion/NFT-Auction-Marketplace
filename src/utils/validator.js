@@ -9,6 +9,16 @@ export default class Validator {
         return true;
     }
 
+    isValidBidAmount(amount){
+        if(isNaN(amount)){
+            return false;
+        }
+        if(amount < 1){
+            return false;
+        }
+        return true;
+    }
+
     isValidIncrement(increment){
         if(isNaN(increment)){
             return false;
@@ -24,6 +34,13 @@ export default class Validator {
             return false;
         }
         if(increment < 0 || increment > 168){
+            return false;
+        }
+        return true;
+    }
+
+    isValidName(name){
+        if(!isNaN(name)){
             return false;
         }
         return true;

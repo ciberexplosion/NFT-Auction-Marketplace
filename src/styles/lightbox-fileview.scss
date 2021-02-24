@@ -1,0 +1,36 @@
+.light-box-container{
+
+    #file-name{
+        visibility: hidden;
+        height: 0px !important;
+    }
+    
+    #pdf-renderer{
+        max-height: 450px;
+        overflow: auto !important;
+    }
+
+    #image-renderer{
+        // width: 100% !important;
+        height: 450px !important;
+        overflow: auto !important;
+    }
+    
+    .lnHoPC::-webkit-scrollbar-thumb {
+        background: #2469C2 !important;
+    }
+    
+    .fslightbox-source{
+        width: 95% !important;
+        height: 88vh !important;   
+    }    
+    
+    // .icoRhe{
+    //     background-image: none !important;
+    // }
+
+    #pdf-controls{
+        padding-right: 30px;
+    }
+   
+}

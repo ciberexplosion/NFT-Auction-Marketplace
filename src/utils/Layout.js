@@ -5,14 +5,14 @@ class Layout extends Component {
     constructor(props){
         super(props);
         this.state = {
-
+            baseAppState: this.props.baseAppState
         }
     }
 
     render() {
         return (
             <div>
-                <NavigationBar baseAppState={this.props.baseAppState}/>
+                <NavigationBar baseAppState={this.state.baseAppState} refreshStateCallback={()=>this.props.refreshStateCallback()}/>
                 {this.props.children}
             </div>
         );

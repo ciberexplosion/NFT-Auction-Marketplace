@@ -2,6 +2,7 @@
 import './App.css';
 import {BrowserRouter as Router, Route, Redirect, Switch} from 'react-router-dom';
 import Layout from './utils/Layout';
+import HelperFunctions from './utils/Util';
 // import Switch from 'react-bootstrap/esm/Switch';
 import Home from './pages/Home';
 import MarketPlaceBuy from './pages/MarketPlaceBuy';
@@ -10,7 +11,7 @@ import Unauthorized from './pages/Unathorized';
 import NotFound from './pages/NotFound';
 import { Component } from 'react';
 import getWeb3 from "./getWeb3";
-import ArtAuction from "./abis/ArtAuction.json"
+import ArtAuction from "./abis/ArtAuction.json";
 
 class App extends Component {
 
@@ -24,15 +25,15 @@ class App extends Component {
       pageLoading: true
     };
 
-    this.userSignin = this.userSignin.bind(this);
+    // this.userSignin = this.userSignin.bind(this);
   }
 
   componentWillUnmount=()=>{
     localStorage.removeItem('isAuthenticated');
   }
 
-  componentDidMount = async () => {
-    try {
+  componentDidMount = async ()=>{
+    try{
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
 
@@ -44,6 +45,7 @@ class App extends Component {
       const instance = new web3.eth.Contract(ArtAuction.abi,
         myContractAddress);
 
+      //for local development
       // const networkId = await web3.eth.net.getId();
       // const deployedNetwork = ArtAuction.networks[networkId];
       // const instance = new web3.eth.Contract(
@@ -51,24 +53,23 @@ class App extends Component {
       //   deployedNetwork && deployedNetwork.address,
       // );
 
-      // const Contract = truffleContract(CentralBBookshop);
-      // Contract.setProvider(web3.currentProvider);
-      // const instance = await Contract.deployed();
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance });//() => this.userSignin()
-
-    } catch (error) {
+    //   localStorage.setItem('contract',JSON.stringify(instance));
+      localStorage.setItem('accounts',accounts);
+      this.setState({web3: web3, accounts: accounts, contract: instance });
+    }
+    catch (error) {
       // Catch any errors for any of the above operations.
       alert(
         `Failed to load web3, accounts, or contract. Check console for details.`,
       );
       console.error(error);
-    }
+    }    
   };
 
-  userSignin = () =>{
+  /*userSignin = () =>{
     // sign user in
     const { accounts, contract } = this.state;
     let user = contract.methods.getUser().call({from: accounts[0]});
@@ -88,7 +89,7 @@ class App extends Component {
       this.setState({pageLoading: false});
     })   
     
-  }
+  }*/
 
   render(){
     return (

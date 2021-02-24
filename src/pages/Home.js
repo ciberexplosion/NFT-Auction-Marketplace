@@ -3,12 +3,50 @@ import React, { Component } from 'react';
 import ClosingArtsSideBarList from '../components/ClosingArtsSideBarList';
 import MenuCard from '../components/Card';
 import {Link} from 'react-router-dom';
+import ArtListItem from '../components/ArtListItem';
 
 class Home extends Component {
     constructor(props){
         super(props);
-
+        this.state = {
+            expiringAuctionItems: [],
+            contract: this.props.baseAppState.contract
+        }
     }
+
+    
+    // fetchExpiringAuctions = () =>{
+    //     if(!this.state._isMount) return;
+    //     console.log("fetch my art items method");
+    //     const contract = this.state.contract;
+    //     if(!this.state.accounts) return;
+    //     const account = this.state.accounts[0];       
+
+    //     let artItemId=0;
+
+    //     let response = contract.methods.getArtItem(artItemId).call({from: account});
+    //     response.then(result => {
+    //         console.log('get art item result', result);
+    //         if(result.status){
+                
+    //         }
+    //         else{
+    //             this.setState(prevState => ({
+    //                 error: {
+    //                     ...prevState.error,
+    //                     auctionedItems: 'Error — A minor error occured. Take a look at the log'
+    //             }})); 
+    //         }
+    //         this.fetchMyArtItems();
+    //     }).catch(error=>{
+    //         console.log('my auctioned items error: ', error);
+    //         this.setState(prevState => ({
+    //             error: {
+    //                 ...prevState.error,
+    //                 auctionedItems: error.message
+    //         }})); 
+    //     }); 
+    // }
 
     render() {
         return (
@@ -47,7 +85,15 @@ class Home extends Component {
                     <MDBCol md="3" lg="3" xl="3" className="sidebar">
                         <h2>CATCH UP</h2>
                         <hr />
-                        <ClosingArtsSideBarList />
+                        <div className="art-side-bar-wrapper pr-2">
+                            {this.state.expiringAuctionItems.length > 0 ?
+                                this.state.expiringAuctionItems.map((item, index) => {
+                                    return(
+                                        <ArtListItem key={index} artTitle={item.name} currentHighestBid="" timeLeft={""} />
+                                    );
+                                })
+                            : <h6 className="mt-3">There are no expiring bids</h6>}
+                        </div>
                     </MDBCol>
                 </MDBRow>
             </MDBContainer>
