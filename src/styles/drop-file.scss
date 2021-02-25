@@ -1,0 +1,47 @@
+
+.drop-file {
+  /* basic styles */
+  border-radius: 2px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.drop-file .card{
+  height: 100% !important;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.drop-file .animated.bounce-in .card{
+  height: 100%;    
+}
+
+.drop-file:hover{
+  cursor: pointer;
+}
+
+.drop-file .animated{
+  height: 100%;
+}
+
+.drop-file .card p{
+  font-weight: 500;
+  margin: 10px 40px;
+}
+
+.drop-file .card i{
+  color: #33b5e5;  
+}
+
+// After file is loaded
+.drop-file.file-loaded .card{
+  background-color: #33b5e5;  
+  color: #ffffff;
+}
+
+.drop-file.file-loaded .card i{
+  color: #ffffff;
+}
